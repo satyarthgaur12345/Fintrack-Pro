@@ -123,6 +123,41 @@ See **AI_JOURNAL.md** for details.
 
 ---
 
-## Author
+## Architecture Overview
+
+The reconciliation system follows a simple service architecture:
+
+Client → API Route → Reconciliation Service → Database
+
+Key components:
+
+- API Route: request validation, authentication
+- Reconciliation Engine: matching algorithm
+- Database: stores payments and reconciliation runs
+- Dashboard: displays reconciliation history
+
+Matching strategy:
+
+1. Exact reference match (`externalRef === bank.reference`)
+2. Fallback: amount + currency match
+3. Discrepancies recorded when amounts differ
+
+Financial calculations are handled using **integer cents** to avoid floating-point precision errors.
+
+---
+
+## Known Limitations
+
+This implementation focuses on core reconciliation functionality.
+
+Future improvements could include:
+
+- handling multi-currency reconciliation
+- distributed locking to prevent concurrent reconciliation runs
+- idempotency protection for duplicate API requests
+- reconciliation job queue for very large batches
+- pagination for dashboard history
+
+  ## Author
 
 Satyarth Gaur
